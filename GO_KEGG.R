@@ -1,12 +1,12 @@
-#下载包#
-install.packages("ggplot2")
-install.packages("openxlsx")
-#加载包#
+# 下载包
+# install.packages("ggplot2")
+# install.packages("openxlsx")
+
 library(ggplot2)
 library(openxlsx)
-#导入数据#
-remove(list = ls()) #清除 Global Environment
-getwd()  #查看当前工作路径
+
+remove(list = ls())
+getwd() 
 setwd("C:/Rdata/jc")  #设置需要的工作路径
 list.files()  #查看当前工作目录下的文件
 go_enrich = read.xlsx("enrich-gene.xlsx",sheet= "ONTOLOGY",sep=',') 
