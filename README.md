@@ -24,6 +24,25 @@
 
 使用[TCGA数据库](https://portal.gdc.cancer.gov/)和[GEO数据库](https://www.ncbi.nlm.nih.gov/geo/)筛选小细胞肝癌(HCC)预后相关基因，从[HAGR](https://genomics.senescence.info/)和[msigdb](https://www.gsea-msigdb.org/gsea/msigdb)数据获取衰老相关基因，将两者取交集后构建基因蛋白互作网络
 
+### TCGA数据库
+
+
+
+### HAGR数据库
+
+该库本身提供了下载链接，我在下载后对其进行了清洗
+
+### msigdb数据库
+以"aging"作为关键词，Search Filters中collection设置为"all collections"，source species设置为"Homo sapiens",contributors设置为"all contributions"
+
+在msigdb数据库中共得到56个衰老相关基因集
+
+
+
+
+
+
+
 ## 3、富集分析与分子验证
 
 ### 3.1 分子对接验证
