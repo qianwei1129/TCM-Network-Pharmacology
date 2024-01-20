@@ -42,33 +42,36 @@ writexl::write_xlsx(Network, "data/pre/step_1/washed_data/TCM_Network.xlsx")
 # 清洗衰老相关基因
 msigdb_data <- clusterProfiler::read.gmt(gmtfile = "data/pre/step_2/msigdb_data.gmt") 
 View(msigdb_data)
-writexl::write_xlsx(msigdb_data, "data/washed_data/HAGR")
+
+msigdb_data_up <- msigdb_data[grepl("UP$", msigdb_data$term), ]
+msigdb_data_up$term <- "up"
+rownames(msigdb_data_up) <- NULL
+
+msigdb_data_down <- msigdb_data[grepl("DN", msigdb_data$term), ]
+msigdb_data_down$term <- "down"
+rownames(msigdb_data_down) <- NULL
+
+View(msigdb_data_up)
+
+
 
 HAGR_data_over <- readxl::read_xlsx("data/pre/step_2/HAGR_data.xlsx", sheet = 2)
 HAGR_data_under <- readxl::read_xlsx("data/pre/step_2/HAGR_data.xlsx", sheet = 3)
 View(HAGR_data_over)
 View(HAGR_data_under)
 
+colnames(HAGR_data_over)[1] <- "temp"
+colnames(HAGR_data_under)[1] <- "temp"
 
-# step 3:
-# 清洗HCC预后相关基因
+HAGR_data <- rbind(HAGR_data_over, HAGR_data_under)
+colnames(HAGR_data) <- HAGR_data[1, ]
+HAGR_data <- HAGR_data[(2:nrow(HAGR_data)), ]
 
+HAGR_data$Entrez[(1:449)] <- "UP"
+HAGR_data$Entrez[(450:nrow(HAGR_data))] <- "down"
+colnames(HAGR_data)[2] <- "flag"
 
+View(HAGR_data)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+writexl::write_xlsx(HAGR_data, "data/washed_data/HAGR_data.xlsx")
+writexl::write_xlsx(msigdb_data, "data/washed_data/msigdb_data.xlsx")
