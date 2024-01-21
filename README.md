@@ -49,6 +49,7 @@
 ## 3、小细胞肝癌预后相关基因_TCGA数据库
 
 使用[TCGA数据库](https://portal.gdc.cancer.gov/)通过TCGA-LIHC(2023年1月,n=377)，下载clinical（临床信息），点击Metadata（样本信息），cart（基因文件）[/data/TCGA数据库]
+以"stranded_first"作为特定基因的表达水平评价量，
 
 
 
