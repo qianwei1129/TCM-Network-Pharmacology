@@ -1,4 +1,4 @@
-load("exp_clinical")
+load("files/exp_clinical")
 
 install.packages("survival") 
 install.packages("survminer")
@@ -44,10 +44,10 @@ data <- rbind(clinical_data, gene_data)
 data <- as.data.frame(t(data))
 
 rownames(data)[6:nrow(data)] <- rownames(exp_clinical)[1:(nrow(exp_clinical)-5)]
-save(data, file = "gene_clinical_data")
+save(data, file = "files/gene_clinical_data")
 
 
 # 做相关性分析
-load("gene_clinical_data")
+load("files/gene_clinical_data")
 
 View(data[(1:50), (1:50)])

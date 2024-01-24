@@ -166,7 +166,7 @@ rownames(exp_clinical) <- exp_clinical$id
 exp_clinical <- as.data.frame(exp_clinical)
 
 gene_name <- exp_clinical$id
-save(exp_clinical, gene_name, file = "exp_clinical")
+save(exp_clinical, gene_name, file = "files/exp_clinical")
 
 
 
