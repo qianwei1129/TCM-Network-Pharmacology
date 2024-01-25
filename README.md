@@ -56,7 +56,8 @@ library("survminer")
 使用[TCGA数据库](https://portal.gdc.cancer.gov/)通过TCGA-LIHC数据集(2023年1月,n=377)，
 下载clinical（临床信息），点击Metadata（样本信息），cart（基因文件）[/data/TCGA数据库]获取转录组测序数据与临床数据  
 
-接下来，通过多种机器学习算法构建预后相关基因分类模型，包括单变量、最小绝对收缩和选择算子以及多变量Cox回归模型
+接下来，基于拟合多因素Cox回归和lasso回归，构建预后效果评价分类模型  
+
 以"stranded_first"作为特定基因的表达水平评价量，临床信息中选择vital_status：生存状态（例如，存活、死亡）和days_to_death：诊断后至死亡的天数，作为评价的临床指标（这边真的，这个数据集上传者职业素质真差，给出的临床数据好多错位的），
 最后得到如下结果：[data/washed_data/TCGA/data_exp_clinical.xlsx]
 
