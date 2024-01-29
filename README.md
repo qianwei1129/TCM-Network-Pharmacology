@@ -30,7 +30,7 @@
 
 ## 2、衰老相关基因
 
-从[HAGR](https://genomics.senescence.info/)和[msigdb](https://www.gsea-msigdb.org/gsea/msigdb)数据获取衰老相关基因，将两者取交集后构建基因蛋白互作网络
+从[HAGR](https://genomics.senescence.info/)和[msigdb](https://www.gsea-msigdb.org/gsea/msigdb)数据获取细胞衰老相关基因，将两者取交集后构建基因蛋白互作网络
 
 
 ### HAGR数据库
