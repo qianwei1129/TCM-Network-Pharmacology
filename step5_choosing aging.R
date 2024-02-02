@@ -1,4 +1,7 @@
 # 衰老相关基因与HCC基因、中药基因求交集（降维）
+rm(list = ls())
+
+load("files/exp_clinical")
 
 library(dplyr)
 
@@ -16,7 +19,7 @@ colnames(aging_gene) <- c("gene")
 
 load("files/gene_clinical_data")
 
-HCC_gene <- as.data.frame(colnames(data)[6:ncol(data)])
+HCC_gene <- as.data.frame(rownames(exp_clinical))
 colnames(HCC_gene) <- c("gene")
 
 aging_HCC_gene <- unique(intersect(aging_gene, HCC_gene))

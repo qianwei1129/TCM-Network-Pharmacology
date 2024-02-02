@@ -4,7 +4,7 @@ library(openxlsx)
 library(sets)
 library(xlsx)
 
-
+rm(list = ls())
 
 # 读取文件夹
 data_path <- "data/washed_data/TCGA/gdc_download_20240120_110416.041068/"
@@ -105,9 +105,13 @@ for (i in 1:nrow(clinical)) {
   }
 }
 
+sum(data_clinical$occupation_duration_years == "Dead")
+
 clinical$occupation_duration_years <- ifelse(clinical$occupation_duration_years == "Dead", 1, 0)
 
-clinical$country_of_residence_at_enrollment <- as.numeric(clinical$country_of_residence_at_enrollment)
+sum(clinical$occupation_duration_years == 1)
+
+# clinical$country_of_residence_at_enrollment <- as.numeric(clinical$country_of_residence_at_enrollment)
 
 extract_numbers <- function(s) {
   # 提取所有数字并分配到两列
@@ -131,23 +135,40 @@ clinical <- clinical[, c("case_submitter_id", # 编号
                          "percent_tumor_invasion",
                          "occupation_duration_years")] # 出生与死亡日期第三方案、是否死亡
 
-clinical <- clinical[complete.cases(clinical["first"]), ]
-clinical <- clinical[clinical$first != 0, ]
+sum(clinical$occupation_duration_years == 1)
 
 colnames(clinical) <- c("id", "age", "first", "second", "to_death", "to_follow_up", "flag")
 
-clinical$to_follow_up <- as.numeric(clinical$to_follow_up)
-clinical$time <- ifelse(is.na(clinical$to_follow_up), clinical$to_death, clinical$to_follow_up)
+# clinical$to_follow_up <- as.numeric(clinical$to_follow_up)
 
-clinical <- as.data.frame(t(clinical[, c("id", # 编号
-                                         "age", # 年龄
-                                         "first", 
-                                         "second", 
-                                         "time",
-                                         "flag")])) # 出生与死亡日期第三方案、是否死亡
+clinical$time <- ifelse(!is.na(clinical$to_follow_up) & 
+                          clinical$to_follow_up != "--	0	--" & 
+                          clinical$to_follow_up != "--	--" &
+                          clinical$to_follow_up != "",
+                        clinical$to_follow_up, 
+                        clinical$to_death)
+
+any(is.na(clinical$first))
+any(is.na(clinical$second))
+
+clinical <- clinical[!(is.na(clinical$time)), ]
+
+clinical <- as.data.frame(clinical)
+sum(as.numeric(clinical$flag))
+
+clinical <- as.data.frame(clinical[, c("id", # 编号
+                                       "age", # 年龄
+                                       "first", 
+                                       "second", 
+                                       "time",
+                                       "flag")]) # 出生与死亡日期第三方案、是否死亡
+
+clinical <- clinical[!(clinical$time == 0), ]
 
 exp <- readxl::read_xlsx("data/washed_data/TCGA/exp.xlsx")
 gene <- readxl::read_xlsx("data/washed_data/TCM_Type.xlsx")
+
+clinical <- t(clinical)
 
 colnames(clinical) <- clinical[1, ]
 clinical <- clinical[-1, ]
@@ -155,18 +176,31 @@ clinical <- clinical[-1, ]
 colnames(exp)
 data_rownames <- c(as.list(exp$...1), "age", "first", "second", "time", "flag")
 
+colnames(exp)
+colnames(clinical)
+
+colnames(exp) <- sub("\\..*$", "", colnames(exp))
+
 common_columns <- intersect(colnames(exp), colnames(clinical))
+common_columns
+
 exp <- exp[common_columns]
+clinical <- as.data.frame(clinical)
 clinical <- clinical[common_columns]
 
 exp_clinical <- rbind(exp, clinical)
-exp_clinical$id <- data_rownames
 
-rownames(exp_clinical) <- exp_clinical$id
-exp_clinical <- as.data.frame(exp_clinical)
+# View(exp_clinical[nrow(exp_clinical) - 5 : nrow(exp_clinical), ])
 
-gene_name <- exp_clinical$id
-save(exp_clinical, gene_name, file = "files/exp_clinical")
+rownames(exp_clinical) <- data_rownames
+
+# exp_clinical <- as.data.frame(exp_clinical)
+
+rownames(exp_clinical)
+colnames(exp_clinical)
+# exp_clinical$id
+
+save(exp_clinical, data_rownames, file = "files/exp_clinical")
 
 
 
