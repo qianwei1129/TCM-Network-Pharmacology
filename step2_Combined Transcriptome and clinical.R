@@ -3,6 +3,7 @@ library(dplyr)
 library(openxlsx)
 library(sets)
 library(xlsx)
+library(stats)
 
 rm(list = ls())
 
@@ -165,8 +166,58 @@ clinical <- as.data.frame(clinical[, c("id", # 编号
 
 clinical <- clinical[!(clinical$time == 0), ]
 
+rm(list = ls())
+
 exp <- readxl::read_xlsx("data/washed_data/TCGA/exp.xlsx")
 gene <- readxl::read_xlsx("data/washed_data/TCM_Type.xlsx")
+
+# PCA降维
+View(exp)
+exp <- data.frame(exp)
+rownames(exp) <- exp$...1
+exp <- exp[, -1]
+
+exp_filtered <- exp[, apply(exp, 2, var, na.rm = TRUE) != 0]
+
+
+exp_filtered[is.na(exp_filtered)] <- 0
+
+# 再次尝试执行PCA
+# exp_pca_result <- prcomp(t(exp_filtered), scale. = FALSE)
+# summary(exp_pca_result)
+# # plot(exp_pca_result$x[, 1:2], asp = 1, xlab = "PC1", ylab = "PC2")
+# 
+# install.packages("Rtsne")
+# install.packages("harmony")
+# 
+# library(Rtsne) 
+# library(harmony)
+# 
+# metadata <- data.frame(
+#   Batch = colnames(exp)[1:425]
+# )
+# 
+# View(metadata)
+# 
+# harmony_out <- HarmonyMatrix(data_mat = exp_pca_result$x[, 1:425],  # 使用前50个主成分
+#                              meta_data = metadata,
+#                              vars_use = "Batch",
+#                              do_pca = FALSE)
+# 
+# # t-SNE可视化Harmony调整后的结果
+# tsne_out <- Rtsne(harmony_out, dims = 2, perplexity = 50)
+# 
+# batches <- unique(metadata$Batch)  
+# batch_colors <- setNames(rainbow(length(batches)), batches)
+# colors <- batch_colors[metadata$Batch]
+# 
+# # 现在可以使用这些颜色绘制t-SNE图
+# plot(tsne_out$Y[,1], tsne_out$Y[,2], col = colors, pch = 20, asp = 1)
+# 
+# # 绘制t-SNE图
+# plot(tsne_out$Y[,1], tsne_out$Y[,2], col = metadata$Batch, pch = 20, asp = 1)
+
+
 
 clinical <- t(clinical)
 
