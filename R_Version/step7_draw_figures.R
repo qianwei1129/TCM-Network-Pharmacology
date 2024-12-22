@@ -113,3 +113,4 @@ ggplot(tsne_result,
        aes(tSNE1, tSNE2, color = risk_group)) +
   geom_point()
 
+KEGG_data_topN$Term
